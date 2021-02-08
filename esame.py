@@ -17,11 +17,6 @@ class CSVTimeSeriesFile():
     def get_data(self):
         #creazione lista vuota per mettere i dati che dovrò restituire
         time_series=[]
-
-        #controllo che i valori siano in una lista
-        if not isinstance(time_series,list):
-            raise ExamException('I valori non sono nella lista "{}"'.format(type(data)))
-
         #provo ad aprire il file        
         try:
             time_series_file = open(self.name, 'r') 
@@ -35,13 +30,16 @@ class CSVTimeSeriesFile():
             elements=line.split(',')
             # Se NON sto processando l'intestazione
             if elements[0] != 'epoch':
-                # Setto la data ed il valore
-                epoch = elements[0]
-                temperature = elements[1]
-                #controllo che i valori siano numerici e del tipo richiesto 
-                #epoch deve essere di tipo int
-                #temperature può essere sia float che int
-                time_series.append([int(epoch), float(temperature)])   
+                try:
+                    # Setto la data ed il valore
+                    epoch = elements[0]
+                    temperature = elements[1]
+                    #controllo che i valori siano numerici e del tipo richiesto 
+                    #epoch deve essere di tipo int
+                    #temperature può essere sia float che int
+                    time_series.append([int(epoch), float(temperature)])   
+                except:
+                    print('Impossibile aggiungere la linea {}'.format(line))    
         
         # Chiudo il file
         time_series_file.close() 
@@ -58,7 +56,7 @@ class CSVTimeSeriesFile():
 #definisco la funzione per calcolare le statistiche GIORNALIERE
 def daily_stats(lista):
 
-    controllo che i valori siano in una lista
+    #controllo che i valori siano in una lista
     if not isinstance(lista,list):
         raise ExamException('I valori non sono nella lista "{}"'.format(type(lista)))
 
@@ -78,18 +76,16 @@ def daily_stats(lista):
         #controllo che non sia già presente il dato
         if(day_start_epoch not in giorni):
             #se non c'è lo aggiungo
-            giorni.append(day_start_epoch)
-
-    #Controllo sia effettivamente un mese
-    if(len(giorni)not in [28, 29, 30, 31]):
-        raise ExamException("Erroe! il mese non è completo")        
+            giorni.append(day_start_epoch)     
     
     #definisco l'indice per il ciclo
     i=0;
     j=0;
+    
     while(i<len(giorni)):
         #creo una lista vuota per mettere i valori di ogni singolo giorno
         giorno=[]
+
         while(j<len(lista) and giorni[i]==(lista[j][0]-lista[j][0]%86400)):
             giorno.append(lista[j][1])
             j=j+1
@@ -99,13 +95,13 @@ def daily_stats(lista):
         #vado avanti con il contatore
         i=i+1;
         
-        #ritorno la lista con i risultati
-        return statistiche   
+    #ritorno la lista con i risultati
+    return statistiche   
 
 
 #CORPO DEL PROGRAMMA       
 time_series_file = CSVTimeSeriesFile(name = 'data.csv')
 time_series = time_series_file.get_data()
-stat=daily_stats(time_series)#<--gli passi la lista presa da sopra
-
+stat=daily_stats(time_series)
+print(stat)
 
