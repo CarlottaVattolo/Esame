@@ -85,8 +85,9 @@ def daily_stats(lista):
     while(i<len(giorni)):
         #creo una lista vuota per mettere i valori di ogni singolo giorno
         giorno=[]
-
+        #in questo ciclo gli passo le misurazioni 
         while(j<len(lista) and giorni[i]==(lista[j][0]-lista[j][0]%86400)):
+            #aggiungo i valori alla lista
             giorno.append(lista[j][1])
             j=j+1
         #uso la forma contratta per il min e max della build-in e gli passo gli elementi
