@@ -99,3 +99,10 @@ def daily_stats(lista):
     #ritorno la lista con i risultati
     return statistiche   
 
+#corpo programma
+time_series_file = CSVTimeSeriesFile(name = 'data.csv')
+time_series = time_series_file.get_data()
+stat=daily_stats(time_series)
+print(stat)
+
+
